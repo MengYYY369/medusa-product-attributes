@@ -1,8 +1,9 @@
 import { useMemo } from "react"
 import ru from "./locales/ru.json"
 import en from "./locales/en.json"
+import zh from "./locales/zh.json"
 
-const locales: Record<string, Record<string, string>> = { ru, en }
+const locales: Record<string, Record<string, string>> = { ru, en, zh }
 
 function detectLang(): string {
   if (typeof window === "undefined") return "en"

@@ -49,7 +49,7 @@
 | **Templates** | Reusable blueprints — apply to any category in one click |
 | **Auto Slug** | Labels are transliterated (Russian, Chinese, any script) |
 | **Smart File Naming** | Uploaded images renamed to `{product_handle}_{attr_key}.ext` |
-| **i18n** | English and Russian out of the box, extensible |
+| **i18n** | English, Russian and Chinese out of the box, extensible |
 
 ---
 
@@ -218,7 +218,8 @@ medusa-product-attributes/
 │   │   │   ├── i18n.ts
 │   │   │   ├── locales/
 │   │   │   │   ├── en.json
-│   │   │   │   └── ru.json
+│   │   │   │   ├── ru.json
+│   │   │   │   └── zh.json
 │   │   │   └── sdk.ts
 │   │   ├── routes/settings/product-attributes/
 │   │   │   └── page.tsx
@@ -242,6 +243,14 @@ medusa-product-attributes/
 ├── tsconfig.json
 └── LICENSE
 ```
+
+---
+
+## Internationalization (i18n)
+
+Admin UI strings follow the language selected in the Medusa admin (Settings → Profile → Interface language, stored in `localStorage["i18nextLng"]`), falling back to `<html lang>`, then the browser language, then English. Out of the box: `en`, `ru`, `zh` (Simplified Chinese — matches `zh`, `zh-CN`, `zh-TW`, `zh-HK` detection).
+
+To add another language, create `src/admin/lib/locales/<lang>.json` with the same keys as `en.json`, import and register it in `src/admin/lib/i18n.ts`, and add it to the key-parity test in `src/__tests__/locales.test.ts`.
 
 ---
 
