@@ -36,15 +36,38 @@ const ProductAttributeValuesWidget = ({
   const t = useT()
 
   // Hide built-in Medusa "Attributes" widget (Height/Width/Weight/etc.)
+  // The built-in widget is a display-only Container whose h2 comes from
+  // t("products.attributes") in the dashboard locale; row titles come from
+  // t("fields.height" / "fields.weight" / ...). Match per active admin language.
   useEffect(() => {
+    const builtinHeadings = new Set([
+      "Attributes", // en
+      "Атрибуты", // ru
+      "属性", // zh-CN
+      "屬性", // zh-TW
+    ])
+    const builtinRowTitles = [
+      // en
+      "Height",
+      "Weight",
+      // ru
+      "Высота",
+      "Вес",
+      // zh-CN / zh-TW (same wording for these fields)
+      "高度",
+      "重量",
+    ]
     const headings = document.querySelectorAll("h2")
     for (const h of headings) {
-      if (h.textContent === "Attributes" || h.textContent === "Атрибуты") {
-        const container = h.closest(".shadow-elevation-card-rest")
-        if (container && container.querySelector("p")?.textContent?.includes("Height") ||
-            container?.querySelector("p")?.textContent?.includes("Weight")) {
-          ;(container as HTMLElement).style.display = "none"
-        }
+      if (!builtinHeadings.has(h.textContent ?? "")) continue
+      const container = h.closest(".shadow-elevation-card-rest")
+      if (!container) continue
+      // Never hide a container that holds form inputs — the built-in widget
+      // is display-only, while our own widget (same heading text) has inputs.
+      if (container.querySelector("input, select, textarea")) continue
+      const text = container.textContent ?? ""
+      if (builtinRowTitles.some((t) => text.includes(t))) {
+        ;(container as HTMLElement).style.display = "none"
       }
     }
   }, [])
